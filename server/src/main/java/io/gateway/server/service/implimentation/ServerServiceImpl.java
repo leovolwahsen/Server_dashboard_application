@@ -13,7 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Random;
 
@@ -51,7 +50,7 @@ public class ServerServiceImpl implements ServerService {
     @Override
     public Server get(Long id) {
         log.info("Fetching server by id: {}", id);
-        return serverRepo.findBy(id).get();
+        return serverRepo.findById(id).get();
     }
 
     @Override
@@ -69,6 +68,6 @@ public class ServerServiceImpl implements ServerService {
 
     private String setServerImageUrl() {
         String[] imagesNames = { "server1", "server2", "server3", "server4" };
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/server/image" + imagesNames[new Random().nextInt(4)]).toUriString();
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/server/images/" + imagesNames[new Random().nextInt(4)]).toUriString();
     }
 }
