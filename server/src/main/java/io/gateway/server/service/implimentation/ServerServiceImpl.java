@@ -67,7 +67,7 @@ public class ServerServiceImpl implements ServerService {
     }
 
     private String setServerImageUrl() {
-        String[] imagesNames = { "server1", "server2", "server3", "server4" };
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/server/images/" + imagesNames[new Random().nextInt(4)]).toUriString();
+        String[] imagesNames = { "server1", "server2", "server3" };
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/server/images/" + imagesNames[new Random().nextInt(3)]).toUriString();
     }
 }

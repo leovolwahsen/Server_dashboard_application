@@ -1,12 +1,19 @@
 package io.gateway.server;
 
-import io.gateway.server.enumeration.Status;
 import io.gateway.server.model.Server;
 import io.gateway.server.repo.ServerRepo;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+
+import static io.gateway.server.enumeration.Status.SERVER_DOWN;
+import static io.gateway.server.enumeration.Status.SERVER_UP;
 
 @SpringBootApplication
 public class ServerApplication {
@@ -19,13 +26,30 @@ public class ServerApplication {
 	CommandLineRunner run(ServerRepo serverRepo) {
 		return args -> {
 			serverRepo.save(new Server(null, "175.740.2.636", "Windows 11", "32 GB", "Home " +
-					"Laptop", "http://localhost:8080/server/images/server1", Status.SERVER_UP));
-			serverRepo.save(new Server(null, "105.434.2.632", "Linux Ubuntu", "64 GB", "Work " +
-					"Laptop", "http://localhost:8080/server/images/server2", Status.SERVER_UP));
-			serverRepo.save(new Server(null, "185.720.2.116", "Windows 8", "16 GB", "Office " +
-					"Computer", "http://localhost:8080/server/images/server3", Status.SERVER_UP));
-
+					"Laptop", "http://localhost:8080/server/images/server1", SERVER_UP));
+			serverRepo.save(new Server(null, "105.434.2.632", "Linux Ubuntu", "64 GB", "Work Laptop", "http://localhost:8080/server/images/server2", SERVER_DOWN));
+			serverRepo.save(new Server(null, "185.720.2.116", "Windows 8", "16 GB", "Office Computer", "http://localhost:8080/server/images/server3", SERVER_UP));
 		};
 	}
+
+	@Bean
+		public CorsFilter corsFilter() {
+			UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+			CorsConfiguration corsConfiguration = new CorsConfiguration();
+			corsConfiguration.setAllowCredentials(true);
+			corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http" +
+					"://localhost:4200"));
+			corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin",
+					"Content-Type", "Accept", "Jwt-Token", "Authorization", "Origin, Accept",
+					"X-Requested-With", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+			corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept",
+					"Jwt-Token", "Authorization", "Access-Control-Allow-Origin", "Access-Control" +
+							"-Allow-Origin", "Access-Control-Allow-Credentials", "Filename"));
+			corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE",
+					"OPTIONS"));
+			urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+			return new CorsFilter();
+		}
+
 
 }

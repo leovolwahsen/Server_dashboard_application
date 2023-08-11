@@ -3,7 +3,7 @@ package io.gateway.server.service;
 import io.gateway.server.model.Server;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
+
 import java.util.Collection;
 
 public interface ServerService {
